@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<f:view>
+    <h:body>
+        <h:form>
+            <p:commandButton value="Previous page" ajax="false" action="add.xhtml?faces-redirect=true&amp;dialogMode=edit" />
+        </h:form>
+
+        <h:form>
+            <h:panelGroup><br />
+                <p:outputLabel value="Element: "/>
+                <p:selectOneMenu
+                        value="#{categoryController.element}"
+                        converter="elementConverter">
+                    <f:selectItems value="#{categoryController.elements}"/>
+                    <p:ajax event="itemSelect" update="addElementElementPanelInputs"/>
+                </p:selectOneMenu>
+
+                <h:panelGroup id="addElementElementPanelInputs"><br />
+                    <p:outputLabel value="Name: "/>
+                    <p:inputText value="#{categoryController.element.name}"/><br/>
+                    <p:outputLabel value="#{categoryController.element.attributeAmountLabel}: "/>
+                    <p:inputText value="#{categoryController.element.attributeAmount}"/>
+                    <p:outputLabel value="#{categoryController.element.attributeNameLabel}: "/>
+                    <p:inputText value="#{categoryController.element.attributeName}"/>
+                    <p:outputLabel value="Power: "/>
+                    <p:inputText value="#{categoryController.element.power}"/>
+                </h:panelGroup>
+
+                <p:commandButton
+                        value="Edit element"
+                        action="#{categoryController.editElement}"
+                        update="@form"/>
+            </h:panelGroup>
+        </h:form>
+
+        <h:link value="Home" outcome="index.xhtml"/><br/>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<f:view>
+    <h:body>
+        <p:growl widgetVar="notify" showDetail="true" />
+
+        <h:form>
+            <h3>Elements</h3>
+            <h:panelGroup id="categoryPanel">
+                <ul>
+                    <ui:repeat value="#{categoryController.categoryTypes}" var="categoryType">
+                        <li>#{categoryType}
+                            <ul>
+                                <ui:repeat value="#{categoryType.categories}" var="category">
+                                    <li>#{category}
+                                        <p:commandButton
+                                                value="Remove"
+                                                process="@this"
+                                                update="j_idt5:categoryPanel"
+                                                action="#{categoryController.deleteCategory(category)}"/>
+                                        <ul>
+                                            <ui:repeat value="#{category.elements}" var="element">
+                                                <li>#{element}
+                                                    <p:commandButton
+                                                            id="elementButton"
+                                                            value="Remove"
+                                                            update="j_idt5:categoryPanel"
+                                                            action="#{categoryController.deleteElement(element)}"/>
+                                                </li>
+                                            </ui:repeat>
+                                        </ul>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                        </li>
+                    </ui:repeat>
+                </ul>
+            </h:panelGroup>
+
+            <h3>Best elements</h3>
+            <h:panelGroup id="bestElementsPanel">
+                <ul>
+                    <ui:repeat value="#{categoryController.bestElementFromEachCategoryList}" var="element">
+                        <li>#{element}</li>
+                    </ui:repeat>
+                </ul>
+            </h:panelGroup>
+
+        </h:form>
+
+        <p:socket onMessage="handleMessage" channel="/notify" >
+            <p:ajax event="message" update="j_idt5:bestElementsPanel"/>
+        </p:socket>
+
+        <p:socket channel="/jms" >
+            <p:ajax event="message" update="jmsMessage"/>
+        </p:socket>
+
+        <p:panel id="jmsMessage">
+            #{receiverController.message}
+        </p:panel>
+
+        <script type="text/javascript">
+            function handleMessage(facesmessage) {
+                facesmessage.severity = 'info';
+                PF('notify').show([facesmessage]);
+            }
+        </script>
+    </h:body>
+</f:view>
+
+<h:form>
+    <h:link value="Create" outcome="add.xhtml">
+        <f:param name="dialogMode" value="create" />
+    </h:link><br/>
+    <h:link value="Edit" outcome="add.xhtml">
+        <f:param name="dialogMode" value="edit" />
+    </h:link>
+</h:form>
+</html>

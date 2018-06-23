@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<f:view>
+    <h:body>
+        <h:form>
+            <p:outputLabel value="select user: "/>
+            <p:selectOneMenu value="#{userController.user}"
+                             converter="userConverter">
+                <f:selectItems value="#{userController.users}"/>
+                <p:ajax event="itemSelect" execute="@this"/>
+            </p:selectOneMenu><br/>
+            <p:outputLabel value="old password: "/>
+            <p:password type="passsword" value="#{userController.user.oldPassword}" required="true">
+                <p:ajax event="blur" execute="@this"/>
+            </p:password>
+            <br/>
+            <p:outputLabel value="new password: "/>
+            <p:password value="#{userController.user.password}" required="true">
+                <p:ajax event="blur" execute="@this"/>
+            </p:password>
+            <br/>
+            <h:commandButton
+                    value="change"
+                    immediate="true"
+                    action="#{userController.changePassword}"/><br/>
+        </h:form>
+    </h:body>
+</f:view>
+
+<br/>
+<h:link value="home" outcome="index.xhtml"/><br/>
+
+<form action="${pageContext.request.contextPath}/client/logout" >
+    <input type="submit" name="LOGOUT" />
+</form>
+</html>

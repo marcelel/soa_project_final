@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:event listener="#{categoryController.initConversation}"
+         type="preRenderView"/>
+
+<h:head></h:head>
+<f:view>
+    <h:body>
+        <h:form>
+            <h:panelGroup rendered="#{categoryController.createDialogMode}">
+                <h3>Create category</h3>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{categoryController.editDialogMode}">
+                <h3>Edit category</h3>
+            </h:panelGroup>
+            <h:panelGroup>
+                <p:outputLabel value="Choose category type: "/>
+                <p:selectOneMenu
+                        value="#{categoryController.categoryType}"
+                        converter="categoryTypeConverter">
+                    <f:selectItems value="#{categoryController.categoryTypes}"/>
+                    <p:ajax event="itemSelect" listener="#{categoryController.editCategoryTypeChangeListener()}" update="j_idt4:categoryPanel"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+
+            <h:panelGroup id="categoryPanel"><br />
+                <h:panelGroup rendered="#{categoryController.createDialogMode}">
+                    <p:outputLabel value="#{categoryController.categoryType.parameter}: "/>
+                    <p:inputText value="#{categoryController.category.value}" required="true"/><br/>
+                    <p:commandButton
+                            value="Add category"
+                            action="#{categoryController.createCategory}"
+                            update="elementForm"/>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{categoryController.editDialogMode}">
+                    <p:commandButton
+                            value="Choose category"
+                            ajax="false"
+                            rendered="#{categoryController.editDialogMode}"
+                            action="categoryEdit.xhmtl?faces-redirect=true"/>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+
+        <h:form id="elementForm">
+            <h:panelGroup rendered="#{categoryController.createDialogMode}">
+                <h3>Create element</h3>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{categoryController.editDialogMode}">
+                <h3>Edit element</h3>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <p:outputLabel value="Choose category type: "/>
+                <p:selectOneMenu
+                        value="#{categoryController.elementCategoryType}"
+                        converter="categoryTypeConverter">
+                    <f:selectItems value="#{categoryController.categoryTypes}"/>
+                    <p:ajax event="itemSelect" listener="#{categoryController.addElementCategoryTypeChangeListener()}" update="addElementCategoryPanel, addElementElementPanel"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+
+            <h:panelGroup id="addElementCategoryPanel"><br />
+                <p:outputLabel value="Choose category: "/>
+                <p:selectOneMenu
+                        required="true"
+                        value="#{categoryController.elementCategory}"
+                        converter="categoryConverter">
+                    <f:selectItems value="#{categoryController.categories}"/>
+                    <p:ajax event="itemSelect" listener="#{categoryController.addElementCategoryChangeListener()}" update="addElementElementPanel"/>
+                </p:selectOneMenu>
+            </h:panelGroup><br/>
+
+            <h:panelGroup id="addElementElementPanel">
+                <h:panelGroup rendered="#{categoryController.createDialogMode}">
+                    <p:outputLabel value="Element: #{categoryController.element.elementTypeName}"/>
+
+                    <h:panelGroup id="addElementElementPanelInputs"><br />
+                        <p:outputLabel value="Name: "/>
+                        <p:inputText value="#{categoryController.element.name}"/><br/>
+                        <p:outputLabel value="#{categoryController.element.attributeAmountLabel}: "/>
+                        <p:inputText value="#{categoryController.element.attributeAmount}"/>
+                        <p:outputLabel value="#{categoryController.element.attributeNameLabel}: "/>
+                        <p:inputText value="#{categoryController.element.attributeName}"/>
+                        <p:outputLabel value="Power: "/>
+                        <p:inputText value="#{categoryController.element.power}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{categoryController.createDialogMode}"><br/>
+                        <p:commandButton
+                                value="Add element"
+                                update="@form"
+                                action="#{categoryController.createElement}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{categoryController.editDialogMode}">
+                        <p:commandButton
+                                value="Edit element"
+                                action="#{categoryController.editElement}"
+                                update="@form"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{categoryController.editDialogMode}">
+                    <p:commandButton
+                            value="Choose element"
+                            ajax="false"
+                            rendered="#{categoryController.editDialogMode}"
+                            action="elementEdit.xhmtl?faces-redirect=true"/>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+
+        <h:link value="Home" outcome="index.xhtml"/><br/>
+    </h:body>
+</f:view>
+
+</html>

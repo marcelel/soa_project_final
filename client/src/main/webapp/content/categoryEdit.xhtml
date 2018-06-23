@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<f:view>
+    <h:body>
+        <h:form>
+            <p:commandButton value="Previous page" ajax="false" action="add.xhtml?faces-redirect=true&amp;dialogMode=edit" />
+        </h:form>
+
+        <h:form>
+            <h:panelGroup><br />
+                <p:outputLabel value="Choose category: "/>
+                <p:selectOneMenu
+                        required="true"
+                        value="#{categoryController.category}"
+                        converter="categoryConverter">
+                    <f:selectItems value="#{categoryController.categories}"/>
+                    <p:ajax event="itemSelect" update="newCategoryValue"/>
+                </p:selectOneMenu><br/>
+
+                <p:outputLabel id="newCategoryValue" value="#{categoryController.categoryType.parameter}: "/>
+                <p:inputText value="#{categoryController.category.value}" required="true"/>
+                <p:commandButton
+                        value="edit category"
+                        action="#{categoryController.editCategory}"
+                        update="@form"/>
+            </h:panelGroup>
+        </h:form>
+
+        <h:link value="Home" outcome="index.xhtml"/><br/>
+    </h:body>
+</f:view>
+</html>
